@@ -1,5 +1,9 @@
 /*Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment. Mongoose supports Node.js and Deno (alpha). importanto mongoose*/ 
 import  mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import generarId from "../helpers/generarid.js";
+
+
 
 
 const veterinariaSchema = mongoose.Schema({
@@ -10,7 +14,7 @@ const veterinariaSchema = mongoose.Schema({
     },
     password:{
         type: String,
-        required: true
+        required: true,
     },
     email:{
         type: String,
@@ -29,8 +33,8 @@ const veterinariaSchema = mongoose.Schema({
         default: null,
     },
     token:{
-    
-        type: String
+        type: String,
+        default: generarId()
     },
     confirmado:{
         type: Boolean,
@@ -38,8 +42,21 @@ const veterinariaSchema = mongoose.Schema({
     },
 });
 
+//hash password para evitar perdida de Datos 
+veterinariaSchema.pre('save', async function(next){
+if (!this.isModified("password")) {
+    next();
+}
 
+//Validacion de seguridad hash
+const salt = await bcrypt.genSalt(10)
+this.password = bcrypt.hash(this.password, salt)
+});
+
+// comprobamos el password de cada user
+veterinariaSchema.methods.comprobarPassword = async function (passwordFormulario) {
+    return await bcrypt.compare(passwordFormulario, this.password)
+}
 
 const Veterinario = mongoose.model("Veterinario",veterinariaSchema);
-
 export default Veterinario;
