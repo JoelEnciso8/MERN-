@@ -1,8 +1,15 @@
-// creamos el servidor express js 
-import  express  from "express";
-import dotenv from "dotenv";
-import conectarDB from "./config/db.js";
-import VeterinarioRoute from "./routes/VeterinarioRoute.js";
+/* creamos el servidor express js, para eso tenemos que 
+Activar nuestro Node en nuestro comando, npm init
+Activar nuestro Express.js en nuestro comnando ya una vez inicializado node.js , npm init express
+
+
+
+*/ 
+import  express  from "express"; // llamamos nuestro library Express.js  para trabajar con sus middlewares
+import dotenv from "dotenv"; // se Agrega a medida que el codigo avanza, para poder proteger informacion sencible, en este caso, contraseñas, dominios, entre otros.
+import conectarDB from "./config/db.js"; // Conecta la BD de mongo DB con nuestro proyecto, esta es fundamental para almacenar los datos externos del POST y llamarlos con GET , usando Postman
+import VeterinarioRoute from "./routes/VeterinarioRoute.js";//  indica la ruta URL que estaremos usando a lo largo de nuestra aplicacion web, para poder confirmar, registrar, autenticar, etc.
+import PacienteRoute from "./routes/PacienteRoute.js"; //indica la ruta URL que estaremos usando a lo largo de nuestra aplicacion web, para poder confirmar, registrar, autenticar, etc.
 
 
 
@@ -22,8 +29,9 @@ conectarDB();
 
 // MiddleWare - Application-level middleware 
 app.use("/api/veterinarios",VeterinarioRoute)
+app.use("/api/pacientes",PacienteRoute)
 
-
+// Variable de entorno, y puerto local 
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{

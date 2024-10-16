@@ -45,12 +45,13 @@ const veterinariaSchema = mongoose.Schema({
 //hash password para evitar perdida de Datos 
 veterinariaSchema.pre('save', async function(next){
 if (!this.isModified("password")) {
-    next();
+  return  next();
 }
 
 //Validacion de seguridad hash
 const salt = await bcrypt.genSalt(10)
-this.password = bcrypt.hash(this.password, salt)
+this.password = await bcrypt.hash(this.password, salt);
+next();
 });
 
 // comprobamos el password de cada user

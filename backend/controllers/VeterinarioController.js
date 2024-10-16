@@ -1,7 +1,11 @@
 import  Veterinario from "../models/Veterinario.js";
+import generarJWT  from "../helpers/generarJWT.js";
+import generarId from "../helpers/generarid.js";
+
+// permite controlar el registro que se esta haciendo, asi evitamos duplicados con el mismo correo, por lo general se usa el correo para confirmacion de unica cuenta. 
 
 const registrar = async (req,res)=>{
-    const {email} = req.body //cuadno llenas un form en este caso para registrar se unas .body
+    const {email} = req.body // .body se usa cuando llenas un form en este caso para registrar un nuevo usuario, el cual cuenta como form  
 
     // avoiding duplicate users
     const existeUser = await Veterinario.findOne({email})
@@ -50,25 +54,18 @@ const confirmar = async (req,res)=>{
         res.json({msg:'User Confirmed Correctly'})
 
     } catch (error) {
-        console.log(error);
-        
-    }
-
-
-
-    
+        const e = new Error("NO data server")
+        return res.status(404).json({msg: e.message});   
+    }  
 };
 
 
 
-const perfil =(req,res)=>{
-    res.json({msg:'Desde el Perfil creado del Veterinario...'})
+const perfil =(req,res)=>{   
+    const {veterinario: perfil} = req
+    res.json({perfil})
     
 };
-
-
-
-
 
 
 
@@ -89,23 +86,89 @@ const autenticar = async (req, res) =>{
     // Usuario no confirmado 
     if (!user.confirmado) {
      const error = new Error("Tu cuenta no ha sido confirmada...");
-     return res.status(403).json({msg: error.message})
+     return res.status(403).json({msg: error.message});
     };
 
     // revisar Password
-    const passwordCorrecto = await user.comprobarPassword(password) 
-    if (!passwordCorrecto) {
-        return res.status(404).json({msg: "Contraseña incorrecta"});
+    if (await user.comprobarPassword(password)) {
+        res.json({token: generarJWT(user.id)})
+        res.json({msg: "Inicio de sesión exitoso", user});
+    } else {
+        const error = new Error("Contraseña incorrecta")
+        return res.status(404).json({msg: error.message});
+
     }
 
-    res.json({msg: "Inicio de sesión exitoso", user});
+};
 
+
+const olvidePassword = async (req,res)=>{   
+    const { email} = req.body; // body: es usualmente la informacion del formulario que estamos creando, en este caso la estructura del obj en json 
+
+    const existeVeterinario = await Veterinario.findOne({email});
+    if (!existeVeterinario) {
+        const error = new Error("User no existe...");
+        return res.status(404).json({msg: error.message})
+    }
+
+    try {
+        existeVeterinario.token = generarId();
+        await existeVeterinario.save();
+        res.json({msg: "Hemos Enviado un Email , revisalo"})
+    } catch (error) {
+        const e = new Error("no existe Data...");
+        return res.status(404).json({msg: e.message})
+        
+    }
+};
+
+const comprobarToken = async (req,res)=>{   
+    const {token } = req.params // params: lee la informacion de la URL lo cual manda el msj por postman y lo transmite en el body 
+
+    const tokenValido = await Veterinario.findOne({token});
+    if (tokenValido) {
+        // Token Valido, user exist
+        res.json({msg: "Token Valido, User exist"})
+
+    }else{
+        const error = new Error("Token no valido");
+        return res.status(404).json({msg: error.message})
+    }
+
+    
+        
+};
+
+const nuevoPassword = async (req,res)=>{   
+    const {token } = req.params
+    const {password } = req.body
+
+    const veterinario = await Veterinario.findOne({token});
+    if (!veterinario) {
+        const error = new Error("Hubo un Error ");
+        return res.status(404).json({msg: error.message})
+
+    };
+
+    try {
+        veterinario.token = null;
+        veterinario.password = password;
+        await veterinario.save();
+
+        res.json({msg:"Password modificado correctamente"})
+        
+    } catch (e) {
+        const error = new Error("Hubo un Error al reconocer la informacion");
+        return res.status(404).json({msg: error.message})
+    }
+
+    res.json({})
+    
 };
 
 
 
 
-
 export{
-    registrar,perfil, confirmar,autenticar
+    registrar,perfil, confirmar,autenticar,olvidePassword,nuevoPassword,comprobarToken
 };
