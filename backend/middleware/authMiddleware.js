@@ -3,7 +3,7 @@ import Veterinario from "../models/Veterinario.js";
 
 // This help to create the webtoken que estaremos usando para confirmar el passdord y poder continuar si esta connfirmado. 
 
-const checkOut = async (req, res, next) =>{
+const checkAuth = async (req, res, next) =>{
     let token;
 
     // Esta palabra es clave en postman ; Bearer
@@ -30,4 +30,4 @@ const checkOut = async (req, res, next) =>{
         next();
 };
 
-export default checkOut;
+export default checkAuth;
