@@ -40,7 +40,7 @@ const ForgotPassword = () => {
               </Link>
 
               <Link className="block text-center my-5 text-gray-500"
-              href to="/login">Already Signed In? Log In
+              href to="/">Already Signed In? Log In
               </Link>
             </nav>
         </div>    

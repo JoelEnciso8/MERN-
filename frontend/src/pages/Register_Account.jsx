@@ -33,14 +33,11 @@ function Register() {
         }  
 
         setAlerta({});
-
-
         //Creando user en la API 
 
         try {
           const url = "http://localhost:4000/api/veterinarios"
           const respuesta = await axios.post(url,{nombre, email, password})
-
           console.log(respuesta);
           
         } catch (error) {
@@ -127,7 +124,7 @@ function Register() {
 
         <nav className=" mt-2 lg:flex lg: justify-between items-center" >
               <Link className="block text-center my-5 text-gray-500"
-              href to="/login">Already Signed In? Log In
+              href to="/">Already Signed In? Log In
               </Link>
 
               <Link className="block text-center my-5 text-gray-500"

@@ -14,8 +14,8 @@ function App() {
       <BrowserRouter>  
         <Routes>
             <Route path="/" element={<AuthLayout/>}>
-              <Route path="registrar" element={<Register_Account/>}/>
               <Route index element={<Login/>}/>
+              <Route path="registrar" element={<Register_Account/>}/>
               <Route path="confirmar/:id" element={<Confirm_Account/>}/>
               <Route path="olvidePassword" element={<ForgotPassword/>}/>
             </Route>
