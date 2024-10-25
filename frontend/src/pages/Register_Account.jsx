@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {  Link } from "react-router-dom";
+import  axios  from "axios"; // Axios es un Cliente HTTP basado en promesas para node.js y el navegador. Es isomorfico (= puede ejecutarse en el navegador y nodejs con el mismo código base).
 import Alerta from "../components/Alerta.jsx";
 
 function Register() {
@@ -7,35 +8,49 @@ function Register() {
   const[email, setEmail] =useState('')
   const[password, setPassword] =useState('')
   const[repeatPassword, setrepeatPassword] =useState('')
-
-  const {alerta, setAlerta} = useState({})
+  // Alerta mensage
+  const [ alerta, setAlerta ] = useState({})
   
-  const handleSubmit = e =>{
+
+  const handleSubmit = async (e) =>{
     e.preventDefault();
 
-    if ([nombre, email, password, repeatPassword].includes('')) {
-      setAlerta('Aun hay campos vacios');
+    if ([nombre, email, password, repeatPassword].includes('')) 
+      {
+      setAlerta({msg:'Aun hay campos vacios',error:true});
         return;
-        }  
-      
-
-    if (password!== repeatPassword) {
-      setAlerta('No son Iguales, repetir de nuevo ');
-          return;
-        }    
-    if (password.length < 6) {
-      setAlerta('password muy corto, intente de nuevo ');
-          return;
-        }  
-      
-        
-        
       }  
       
 
+    if (password!== repeatPassword) {
+      setAlerta({msg: 'No son Iguales, repetir de nuevo', error: true});
+          return;
+        }    
+
+    if (password.length < 6) {
+      setAlerta({msg:'password muy corto, Min 6 Max 8 Caracteres, intente de nuevo ',error:true});
+          return;
+        }  
+
+        setAlerta({});
 
 
+        //Creando user en la API 
 
+        try {
+          const url = "http://localhost:4000/api/veterinarios"
+          const respuesta = await axios.post(url,{nombre, email, password})
+
+          console.log(respuesta);
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }  
+
+      const {msg} = alerta     
+       
   return (
     <>
         <div>
@@ -47,9 +62,9 @@ function Register() {
         
         <div className=" space-y-5 mt-5 md:mt-20 shadow-xl px-7 py-10 rounded-xl bg-white">
 
-          <Alerta
+          {msg && <Alerta
             alerta={alerta}
-          />
+          />}
 
          <form onSubmit={handleSubmit}>
               <div className=" my-2">

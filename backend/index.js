@@ -10,6 +10,7 @@ import dotenv from "dotenv"; // se Agrega a medida que el codigo avanza, para po
 import conectarDB from "./config/db.js"; // Conecta la BD de mongo DB con nuestro proyecto, esta es fundamental para almacenar los datos externos del POST y llamarlos con GET , usando Postman
 import VeterinarioRoute from "./routes/VeterinarioRoute.js";//  indica la ruta URL que estaremos usando a lo largo de nuestra aplicacion web, para poder confirmar, registrar, autenticar, etc.
 import PacienteRoute from "./routes/PacienteRoute.js"; //indica la ruta URL que estaremos usando a lo largo de nuestra aplicacion web, para poder confirmar, registrar, autenticar, etc.
+import cors from "cors"; // es la forma que tiene el web de proteger una API y asegurando que la url este protegida 
 
 
 
@@ -25,7 +26,22 @@ dotenv.config();
 
 conectarDB();
 
+const dominiosPermitidos =['http://localhost:3000'];
 
+const corsOptions = {
+    origin: function(origin, callback) {
+        if (dominiosPermitidos.indexOf(origin)!== -1)  {
+            // El Origin del request esta permitido
+            callback(null,true)
+        }
+        else{
+            callback(new Error('No permitido por CORS'))
+        }
+    }
+}
+
+// using cors
+app.use(cors(corsOptions))
 
 // MiddleWare - Application-level middleware 
 app.use("/api/veterinarios",VeterinarioRoute)
