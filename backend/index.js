@@ -26,6 +26,7 @@ dotenv.config();
 
 conectarDB();
 
+
 const dominiosPermitidos =['http://localhost:5173'];
 
 const corsOptions = {
@@ -41,7 +42,9 @@ const corsOptions = {
 }
 
 // using cors
-app.use(cors(corsOptions))
+app.use(cors({corsOptions}))
+
+
 
 // MiddleWare - Application-level middleware 
 app.use("/api/veterinarios",VeterinarioRoute)

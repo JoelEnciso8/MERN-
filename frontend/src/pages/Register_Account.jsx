@@ -36,19 +36,33 @@ function Register() {
         //Creando user en la API 
 
         try {
-          const url = "http://localhost:4000/api/veterinarios"
-          const respuesta = await axios.post(url,{nombre, email, password})
-          console.log(respuesta);
-          
+          const url = "http://localhost:4000/api/veterinarios" // agg nuestro local host donde se esta visualizando el backend, para que se vea con el frontEnd
+          const respuesta = await axios.post(url,{nombre, email, password}) // utilizamos axios para que esta no genere conflicto en leer nuestra url externa 
+          console.log(respuesta); // prueba 
+
+          // Validamos, si la respuesta fue exitosa, no me muestre msg de error
+          if (respuesta.data) {
+            setAlerta({ msg: 'Registro exitoso revisa tu Email...', error: false });
+            
+            // Limpia el formulario tras el éxito
+            setNombre('');
+            setEmail('');
+            setPassword('');
+            setrepeatPassword('');
+        }
+          // Nos muestra un msg de error del backend si este usuario ya esta registrado
         } catch (error) {
-          console.log(error);
+          setAlerta({
+            msg: error.response.data.msg,
+            error:true
+          });
           
         }
-      }  
+    }  
 
       const {msg} = alerta     
        
-  return (
+  return ( 
     <>
         <div>
           

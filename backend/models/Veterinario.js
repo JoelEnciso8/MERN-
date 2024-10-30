@@ -21,12 +21,12 @@ const veterinariaSchema = mongoose.Schema({
         required: true,
         unique: true,
         trim:true
-    },
-    telefono:{
-        type: Number,
-        default: null,
-        unique: true,
-        trim:true
+    // },
+    // telefono:{
+    //     type: Number,
+    //     default: null,
+    //     unique: true,
+    //     trim:true
     },
     web:{
         type: String,

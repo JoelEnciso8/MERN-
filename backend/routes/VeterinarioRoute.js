@@ -26,7 +26,7 @@ GET:routing methods Como la vía de acceso se especifica en una única ubicació
 
 // verbo HTTP y pasandolo por postman para leerlo en la base y almacenarlo 
 router.post("/", registrar); //se usa cuando recibe nueva informacion
-router.get('/confirmar/:token', confirmar);//get se usa cuando ya hay una informacion agregada
+router.get('/confirmar/:id', confirmar);//get se usa cuando ya hay una informacion agregada
 router.post('/login', autenticar);
 router.post('/olvide-password', olvidePassword);
 router.route("/olvide-password/:token").get(comprobarToken).post(nuevoPassword)

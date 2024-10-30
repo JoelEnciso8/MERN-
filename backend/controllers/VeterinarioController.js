@@ -1,11 +1,12 @@
 import  Veterinario from "../models/Veterinario.js";
 import generarJWT  from "../helpers/generarJWT.js";
 import generarId from "../helpers/generarid.js";
+import emailRegistro from "../helpers/emailRegistro.js";
 
 // permite controlar el registro que se esta haciendo, asi evitamos duplicados con el mismo correo, por lo general se usa el correo para confirmacion de unica cuenta. 
 
 const registrar = async (req,res)=>{
-    const {email} = req.body // .body se usa cuando llenas un form en este caso para registrar un nuevo usuario, el cual cuenta como form  
+    const {email, nombre} = req.body // .body se usa cuando llenas un form en este caso para registrar un nuevo usuario, el cual cuenta como form  
 
     // avoiding duplicate users
     const existeUser = await Veterinario.findOne({email})
@@ -17,11 +18,18 @@ const registrar = async (req,res)=>{
 
     try {
         // Nuevo Veterinario
-        const veterinario = new Veterinario(req.body);
+        const token= generarId();
+        const veterinario = new Veterinario({...req.body,token});
         const vetGuardado = await veterinario.save();
+        
+        // Enviar Email es lo que se pasa mediante la funcion email registro, en token, este nos muestra el token guardado que se asigna  
+            emailRegistro({
+                email,
+                nombre,
+                token:vetGuardado.token
+            });
 
         res.json( vetGuardado);
-
     } catch (error) {
         console.log(error);
         
@@ -51,7 +59,7 @@ const confirmar = async (req,res)=>{
         userConfirmed.confirmado = true;
         await userConfirmed.save()
 
-        res.json({msg:'User Confirmed Correctly'})
+       return res.json({msg:'User Confirmed Correctly'})
 
     } catch (error) {
         const e = new Error("NO data server")
@@ -76,7 +84,6 @@ const autenticar = async (req, res) =>{
     
     //   Autenticando si el user existe
     const user = await Veterinario.findOne({email})
-
     if (!user) {
         const error = new Error("El usuario NO existe ");
         return res.status(404).json({msg: error.message})
@@ -91,8 +98,7 @@ const autenticar = async (req, res) =>{
 
     // revisar Password
     if (await user.comprobarPassword(password)) {
-        res.json({token: generarJWT(user.id)})
-        res.json({msg: "Inicio de sesión exitoso", user});
+        res.json({token: generarJWT(user.id),msg: "Inicio de sesión exitoso", user})
     } else {
         const error = new Error("Contraseña incorrecta")
         return res.status(404).json({msg: error.message});
