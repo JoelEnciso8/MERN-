@@ -7,7 +7,7 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import  NotFound from "./pages/NotFound.jsx";
 
 
-function App() {
+function App() {  
 // Public Layout  interfaz que vera el usuario, tambien se puede crear un layout privado donde se vera solo las tareas admin con user y password
 
   return (
