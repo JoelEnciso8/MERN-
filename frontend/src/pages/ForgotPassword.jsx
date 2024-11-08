@@ -3,23 +3,29 @@ import {  Link } from "react-router-dom";
 import  Alerta  from "../components/Alerta";
 import  clienteAxios  from "../config/axios";
 
-const ForgotPassword = () => {
+const forgotPassword = () => {
   const [email, setEmail] =useState('');
-  const [alerta, setAlerta] =useState('');
+  const [alerta, setAlerta] =useState({});
   const handleSubmit = async e =>{
       e.preventDefault()
 
       if (email === '' || email.length < 7) {
-          setAlerta({msg: 'El Email es obligatorio', error:true})
+          setAlerta({
+          msg: 'El Email es obligatorio', 
+          error:true})
           return
       }
       
       try {
         const {data} = await clienteAxios.post('/veterinarios/olvidePassword', {email})
+
+        console.log(data);
         
+        setAlerta({msg:data.msg})
+
       } catch (error) {
         setAlerta({
-          msg: 'Hubo un error, por favor intenta nuevamente',
+          msg: error.response.data.msg,
           error: true
         });
       }
@@ -85,4 +91,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default forgotPassword
