@@ -2,6 +2,7 @@ import  Veterinario from "../models/Veterinario.js";
 import generarJWT  from "../helpers/generarJWT.js";
 import generarId from "../helpers/generarid.js";
 import emailRegistro from "../helpers/emailRegistro.js";
+import emailOlvidePassword from "../helpers/emailOlvidePassword.js";
 
 // permite controlar el registro que se esta haciendo, asi evitamos duplicados con el mismo correo, por lo general se usa el correo para confirmacion de unica cuenta. 
 
@@ -120,6 +121,14 @@ const olvidePassword = async (req,res)=>{
     try {
         existeVeterinario.token = generarId();
         await existeVeterinario.save();
+        // enviar email con instrucciones
+        emailOlvidePassword({
+            email,
+            nombre: existeVeterinario.nombre,
+            token: existeVeterinario.token
+        })
+
+
         res.json({msg: "Hemos Enviado un Email , revisalo"})
     } catch (error) {
         const e = new Error("no existe Data...");

@@ -28,8 +28,8 @@ GET:routing methods Como la vía de acceso se especifica en una única ubicació
 router.post("/", registrar); //se usa cuando recibe nueva informacion
 router.get('/confirmar/:token', confirmar);//get se usa cuando ya hay una informacion agregada
 router.post('/login', autenticar);
-router.post('/olvide-password', olvidePassword);
-router.route("/olvide-password/:token").get(comprobarToken).post(nuevoPassword)
+router.post('/olvidePassword', olvidePassword);
+router.route("/olvidePassword/:token").get(comprobarToken).post(nuevoPassword)
 
 // Private Area
 router.get('/perfil',checkOut, perfil); // get se usa cuando ya hay una informacion agg

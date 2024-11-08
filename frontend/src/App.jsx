@@ -5,6 +5,7 @@ import Login from "./pages/Login.jsx";
 import Confirm_Account from "./pages/Confirm_Account.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import  NotFound from "./pages/NotFound.jsx";
+import NewPassword from "./pages/NewPassword.jsx";
 
 
 function App() {  
@@ -18,6 +19,7 @@ function App() {
               <Route path="registrar" element={<Register_Account/>}/>
               <Route path="confirmar/:id" element={<Confirm_Account/>}/>
               <Route path="olvidePassword" element={<ForgotPassword/>}/>
+              <Route path="olvidePassword/:token" element={<NewPassword/>}/>
             </Route>
             <Route path="*" element={<NotFound/>}/>
         </Routes>
