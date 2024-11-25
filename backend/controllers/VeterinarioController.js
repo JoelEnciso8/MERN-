@@ -141,7 +141,8 @@ const comprobarToken = async (req,res)=>{
     const {token } = req.params // params: lee la informacion de la URL lo cual manda el msj por postman y lo transmite en el body 
 
     const tokenValido = await Veterinario.findOne({token});
-    if (tokenValido) {
+    
+    if (tokenValido) {        
         // Token Valido, user exist
         res.json({msg: "Token Valido, User exist"})
 
@@ -157,7 +158,7 @@ const comprobarToken = async (req,res)=>{
 const nuevoPassword = async (req,res)=>{   
     const {token } = req.params
     const {password } = req.body
-
+  
     const veterinario = await Veterinario.findOne({token});
     if (!veterinario) {
         const error = new Error("Hubo un Error ");
@@ -166,6 +167,9 @@ const nuevoPassword = async (req,res)=>{
     };
 
     try {
+        console.log('Token encontrado:', token);
+         console.log('Password nuevo:',password);
+
         veterinario.token = null;
         veterinario.password = password;
         await veterinario.save();

@@ -18,12 +18,12 @@ const forgotPassword = () => {
       
       try {
         const {data} = await clienteAxios.post('/veterinarios/olvidePassword', {email})
-
-        console.log(data);
-        
         setAlerta({msg:data.msg})
+        setEmail('') // Limpia el campo del correo una ves este se agregue 
 
       } catch (error) {
+        console.log(error.response);
+        
         setAlerta({
           msg: error.response.data.msg,
           error: true
