@@ -29,7 +29,8 @@ router.post("/", registrar); //se usa cuando recibe nueva informacion
 router.get('/confirmar/:token', confirmar);//get se usa cuando ya hay una informacion agregada
 router.post('/login', autenticar);
 router.post('/olvidePassword', olvidePassword);
-router.route("/olvidePassword/:token").get(comprobarToken).post(nuevoPassword)
+router.get("/olvidePassword/:token",comprobarToken)
+router.post("/olvidePassword/:token",nuevoPassword)
 
 // Private Area
 router.get('/perfil',checkOut, perfil); // get se usa cuando ya hay una informacion agg

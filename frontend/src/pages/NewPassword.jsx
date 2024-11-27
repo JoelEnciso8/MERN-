@@ -19,7 +19,7 @@ const NewPassword = () => {
   useEffect(() =>{
     const comprobarToken = async () =>{
         try {
-          await clientAxios.post(`/veterinarios/olvidePassword/${token}`)
+          await clientAxios.get(`/veterinarios/olvidePassword/${token}`)
 
           setTokenValido(true)
 
@@ -29,6 +29,7 @@ const NewPassword = () => {
           setAlerta({
             msg:"Hubo un error en la URL,  intente mas tarde..",
             error:true
+            
           })
         };
     };
@@ -38,15 +39,29 @@ const NewPassword = () => {
   
   const handleSubmit = async(e) =>{
       e.preventDefault()
+      
+      //validacion min length 
       if (password.length < 6) {
         setAlerta({
           msg: 'Minimo 6 caracteres, intente de nuevo',
           error:true
-        })
+          
+        });
+        ocultarAlerta()
+        return
 
-        if (password !== repeatPassword) { setAlerta({ msg: 'Las contraseñas no coinciden, intente de nuevo', error: true }); return; }
       } 
-
+      
+      // validacion de coincidencia
+      if (password !== repeatPassword) {
+        setAlerta({ 
+        msg: 'Las contraseñas no coinciden, intente de nuevo',
+        error: true 
+      
+      }); 
+        ocultarAlerta()
+        return
+      } 
 
       try {
         const url = `/veterinarios/olvidePassword/${token}`
@@ -57,15 +72,25 @@ const NewPassword = () => {
         setPassword('')
         setrepeatPassword('')
         setPasswordModificado(true)
+
+        ocultarAlerta()
       } catch (error) {
         setAlerta({
           msg: error.response.data.msg,
           error: true 
         })
+        ocultarAlerta()
       }
 
   }
 
+
+  const ocultarAlerta = () => {
+    setTimeout(() => {
+    setAlerta({})
+  }, 3000);
+
+}
 
   const { msg } = alerta;
   
@@ -76,7 +101,13 @@ const NewPassword = () => {
         Eres nuestra  {" "}<span className="text-green-800">Prioridad</span>, dejame ayudarte con tu password
       </h1>
     </div>
-    {msg && <Alerta alerta={alerta} />}
+    
+        <div className="flex justify-center my-5">
+            <div className="w-full max-w-md px-4">
+              {msg && <Alerta alerta={alerta} />}
+            </div>
+         </div>
+      
     {tokenValido && (<>
           <form onSubmit={handleSubmit }>
           <div className="my-2">

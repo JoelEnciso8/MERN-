@@ -1,6 +1,61 @@
+import { useState } from "react";
 import { Link } from "react-router-dom"; // se importa la manera en como react Importa los links, consumiendo menos memoria
+import useAuth from "../hooks/useAuth";
+import Alerta from "../components/Alerta";
+import clientAxios from "../config/axios";
 
-const Login = () => {
+const Login =  () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [alerta, setAlerta] = useState({});
+
+
+  const handleSubmit = async e =>{
+    e.preventDefault()
+    
+      if ([email,password].includes('')) {
+        setAlerta({
+        msg:'Todos los campos son obligatorios!!',
+        error:true
+      });
+      ocultarAlerta()
+      return
+
+    }
+      
+    
+  try {
+    const {data} =  await clientAxios.post('/veterinarios/login',{email,password});
+
+    // limpiando los campos 
+    limpiarCampos();
+
+    localStorage.setItem('Token',data.token)
+    
+  } catch (error) {
+    setAlerta({
+      msg: error.response.data.msg,
+      error: true 
+    })
+    ocultarAlerta()
+  }
+
+  }
+
+
+  const ocultarAlerta = () => {
+    setTimeout(() => {
+      setAlerta({})
+    }, 3000);
+    
+  }
+  
+  const limpiarCampos = () => {
+    setEmail("");
+    setPassword("");
+  };
+  
+  const {msg} = alerta
   return (
     <>
       
@@ -14,18 +69,23 @@ const Login = () => {
       </div>
 
       <div className="w-full space-y-7 mt-8 md:mt-20 shadow-xl px-7 py-10 rounded-xl bg-white">
-        <form>
+
+         {alerta.msg && <Alerta
+            alerta={alerta}
+          />}
+        <form onSubmit={handleSubmit}>
             <div className=" my-2">
                 <label className="mt-20  text-gray-700 block text-xl font-bold">
 
                   Email
 
                 </label>
-
                   <input
                   type="email"
                   placeholder=" Type your Email"
                   className="border w-full p-3 mt-2 bg-gray-50 rounded-xl"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                   />
             </div>
               <div> 
@@ -39,6 +99,8 @@ const Login = () => {
                   type="password"
                   placeholder=" Type your Password"
                   className="border w-full p-3 mt-2 bg-gray-50 rounded-xl"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                 />           
             </div>  
             <input
