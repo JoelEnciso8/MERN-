@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // se importa la manera en como react Importa los links, consumiendo menos memoria
+import { Link ,useNavigate} from "react-router-dom"; // se importa la manera en como react Importa los links, consumiendo menos memoria
 import useAuth from "../hooks/useAuth";
 import Alerta from "../components/Alerta";
 import clientAxios from "../config/axios";
@@ -8,6 +8,8 @@ const Login =  () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alerta, setAlerta] = useState({});
+
+  const navigate = useNavigate()
 
 
   const handleSubmit = async e =>{
@@ -23,14 +25,17 @@ const Login =  () => {
 
     }
       
-    
+    // agregando el statement trycatch ,pasamos nuestra Route de backend para asi ingresar en nuestro usuario
   try {
     const {data} =  await clientAxios.post('/veterinarios/login',{email,password});
 
     // limpiando los campos 
     limpiarCampos();
 
+    // para que el user y al sesion queden iniciadas esta se deben pasar por localStorage, donde el Token se mostrara como unico dando a entender que estamos en la sesion acordada. 
+
     localStorage.setItem('Token',data.token)
+    navigate('/admin')
     
   } catch (error) {
     setAlerta({

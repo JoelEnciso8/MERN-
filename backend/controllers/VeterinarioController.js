@@ -71,8 +71,8 @@ const confirmar = async (req,res)=>{
 
 
 const perfil =(req,res)=>{   
-    const {veterinario: perfil} = req
-    res.json({perfil})
+    const {veterinario} = req
+    res.json(veterinario)
     
 };
 

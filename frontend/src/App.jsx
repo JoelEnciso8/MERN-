@@ -1,11 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout.jsx";
+import  NotFound from "./pages/NotFound.jsx";
+import RutaProtegida from "./Layout/RutaProtegida.jsx";
+
 import Register_Account from "./pages/Register_Account.jsx";
 import Login from "./pages/Login.jsx";
 import Confirm_Account from "./pages/Confirm_Account.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
-import  NotFound from "./pages/NotFound.jsx";
 import NewPassword from "./pages/NewPassword.jsx";
+import AdminPacient from "../src/pages/AdminPacient.jsx";
+
 import { AuthProvider } from "../src/context/AuthProvider.jsx";
 
 function App() {  
@@ -22,7 +26,16 @@ function App() {
                         <Route path="olvidePassword" element={<ForgotPassword/>}/>
                         <Route path="olvidePassword/:token" element={<NewPassword/>}/>
                     </Route>
-                  <Route path="*" element={<NotFound/>}/>
+
+                  <Route>
+                    <Route path="*" element={<NotFound/>}/>
+                  </Route>
+
+                  <Route>
+                    <Route path="/admin" element={<RutaProtegida/>}/>
+                    <Route index element={<AdminPacient/>}/>
+                  </Route>
+
               </Routes>
           </AuthProvider>
       </BrowserRouter> 
