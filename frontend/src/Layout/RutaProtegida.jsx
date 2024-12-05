@@ -5,12 +5,12 @@ const RutaProtegida = () => {
 
   const { auth} = useAuth()
     console.log(auth);
-    {auth?._id ? <Outlet/> : <Navigate to="" />}
     
     return (
       <>
     
         <h1>Desde Ruta Protegida</h1>
+      {auth?._id ? <Outlet/> : <Navigate to="" />}
    
     </>
   )
