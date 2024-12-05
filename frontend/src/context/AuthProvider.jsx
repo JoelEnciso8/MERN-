@@ -6,13 +6,17 @@ import Alerta from "../components/Alerta";
 const AuthContext = createContext()
 const AuthProvider = ({children})=>{
 
+    const [cargando,setCargando] = useState(true)
     const[auth,setAuth] = useState({})
     
     useEffect(()=>{ 
         const autenticarUser  = async()=>{
             const token = localStorage.getItem('Token')
             console.log('si hay token ');
-            if (!token) return
+            if (!token) {
+                setCargando(false)
+                return
+            }
 
             const config = {
              headers:{
@@ -28,9 +32,10 @@ const AuthProvider = ({children})=>{
                 
             } catch (error) {
                 setAuth({})
-                
 
             }
+
+            setCargando(false)
             
         } 
         
@@ -41,7 +46,8 @@ const AuthProvider = ({children})=>{
         <AuthContext.Provider 
             value={{
                 auth, 
-                setAuth
+                setAuth,
+                cargando
             }}    
             
         >
