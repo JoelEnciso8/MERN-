@@ -1,6 +1,15 @@
+import { Outlet } from "react-router-dom"
+
 const AdminPacient = () => {
   return (
-    <h1>AdminPacient</h1>
+    <>
+    
+    <h1>Desde Administrar AdminPacient</h1>
+    <Outlet/>  
+    </>
+
+
+    
   )
 }
 
