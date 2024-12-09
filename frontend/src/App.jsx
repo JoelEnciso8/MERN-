@@ -12,6 +12,7 @@ import NewPassword from "./pages/NewPassword.jsx";
 import AdminPacient from "../src/pages/AdminPacient.jsx";
 
 import { AuthProvider } from "../src/context/AuthProvider.jsx";
+import { PacientesProvider } from "../src/context/PacientesProvider.jsx";
 
 function App() {  
 // Public Layout  interfaz que vera el usuario, tambien se puede crear un layout privado donde se vera solo las tareas admin con user y password
@@ -19,8 +20,8 @@ function App() {
   return (
       <BrowserRouter>  
           <AuthProvider>
-            
-            <Routes>
+            <PacientesProvider>
+              <Routes>
                   <Route path="/" element={<AuthLayout/>}>
 
                         <Route index element={<Login/>}/>
@@ -39,6 +40,7 @@ function App() {
                   
                     <Route path="*" element={<NotFound/>}/>
               </Routes>
+            </PacientesProvider>
           </AuthProvider>
       </BrowserRouter> 
     

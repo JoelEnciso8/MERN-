@@ -99,7 +99,14 @@ const autenticar = async (req, res) =>{
 
     // revisar Password
     if (await user.comprobarPassword(password)) {
-        res.json({token: generarJWT(user.id),msg: "Inicio de sesión exitoso", user})
+        res.json({
+            _id: user._id,    
+            nombre:user._id,
+            email:user.email,
+            token: generarJWT(user.id)
+                
+
+        })
     } else {
         const error = new Error("Contraseña incorrecta")
         return res.status(404).json({msg: error.message});

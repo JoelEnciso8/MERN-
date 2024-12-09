@@ -1,6 +1,5 @@
 import { useState,useEffect,createContext } from "react";
 import clientAxios from "../config/axios";
-import Alerta from "../components/Alerta";
 
 
 const AuthContext = createContext()
@@ -42,12 +41,19 @@ const AuthProvider = ({children})=>{
         autenticarUser()
     },[])
     
+    const cerrarSesion = () =>{
+        localStorage.removeItem('token')
+        setAuth({})
+    }
+
     return(
         <AuthContext.Provider 
             value={{
                 auth, 
                 setAuth,
-                cargando
+                cargando,
+                setCargando,
+                cerrarSesion
             }}    
             
         >

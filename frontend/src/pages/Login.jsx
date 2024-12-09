@@ -9,6 +9,8 @@ const Login =  () => {
   const [password, setPassword] = useState('');
   const [alerta, setAlerta] = useState({});
 
+  const  {setAuth} =useAuth()
+  
   const navigate = useNavigate()
 
 
@@ -35,11 +37,14 @@ const Login =  () => {
     // para que el user y al sesion queden iniciadas esta se deben pasar por localStorage, donde el Token se mostrara como unico dando a entender que estamos en la sesion acordada. 
 
     localStorage.setItem('Token',data.token)
+
+    console.log(data);
+    setAuth(data)
     navigate('/admin')
     
   } catch (error) {
     setAlerta({
-      msg: error.response.data.msg,
+      // msg: error.response.data.msg,
       error: true 
     })
     ocultarAlerta()
