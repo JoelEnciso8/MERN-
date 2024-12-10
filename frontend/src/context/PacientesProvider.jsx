@@ -18,7 +18,7 @@ export const PacientesProvider = ({children}) => {
                     Authorization: `Bearer ${token}`
                 }
             }
-            const {data} = await clienteAxios.post('/pacientes',paciente,config)
+            const {data} = await clienteAxios.post('/pacientes',pacientes,config)
             console.log(data);
             const {__v ,...pacienteAlmacenado} = data
 

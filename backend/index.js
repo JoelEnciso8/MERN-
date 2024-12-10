@@ -17,10 +17,10 @@ const corsOptions = {
   origin: function (origin, callback) {
     console.log('origin:', origin);
     
-    if (dominiosPermitidos.indexOf(origin) !== -1) {
+    if (dominiosPermitidos.indexOf(origin) !== -1 || !origin) {
       // El Origin del request esta permitido
       callback(null, true);
-    } else {
+    } else {  
       callback(new Error('No permitido por CORS'));
     }
   },
