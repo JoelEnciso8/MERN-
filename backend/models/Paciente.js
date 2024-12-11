@@ -13,6 +13,8 @@ const pacienteSchema = mongoose.Schema({
     email:{      
           type: String,
         required: true,
+        unique: true, 
+        trim:true
     },
     fecha:{      
           type: String,
@@ -28,9 +30,10 @@ const pacienteSchema = mongoose.Schema({
             ref: 'Veterinario',
     },
 },{
-    timestaps: true
+    timestamps: true
 });
 
+  
 const Paciente = mongoose.model("Paciente",pacienteSchema)
 
 export default Paciente;

@@ -11,7 +11,7 @@ export const PacientesProvider = ({children}) => {
     const guardarPaciente = async (paciente) =>{
 
         try {
-            const token = localStorage.getItem('Token')
+            const token = localStorage.getItem('token')
             const config ={
                 headers:{
                     "Content-Type": "application/json",
@@ -26,8 +26,7 @@ export const PacientesProvider = ({children}) => {
 
             
         } catch (error) {
-            console.log(error.response.data.msg);
-            
+            console.log("Error:", error.response ? error.response.data.msg : error.message);            
         }
     }
 
