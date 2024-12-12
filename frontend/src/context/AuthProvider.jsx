@@ -10,8 +10,7 @@ const AuthProvider = ({children})=>{
     
     useEffect(()=>{ 
         const autenticarUser  = async()=>{
-            const token = localStorage.getItem('Token')
-            console.log('si hay token ');
+            const token = localStorage.getItem('token')
             if (!token) {
                 setCargando(false)
                 return

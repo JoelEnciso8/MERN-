@@ -9,7 +9,6 @@ export const PacientesProvider = ({children}) => {
     const [pacientes, setPacientes] =useState([])
 
     const guardarPaciente = async (paciente) =>{
-
         try {
             const token = localStorage.getItem('token')
             const config ={
@@ -18,7 +17,7 @@ export const PacientesProvider = ({children}) => {
                     Authorization: `Bearer ${token}`
                 }
             }
-            const {data} = await clienteAxios.post('/pacientes',pacientes,config)
+            const {data} = await clienteAxios.post('/pacientes',paciente,config)
             console.log(data);
             const {__v ,...pacienteAlmacenado} = data
 
@@ -26,16 +25,17 @@ export const PacientesProvider = ({children}) => {
 
             
         } catch (error) {
-            console.log("Error:", error.response ? error.response.data.msg : error.message);            
+            console.log( error);            
         }
+        console.log(paciente);
+        
     }
 
   return (
     <PacientesContext.Provider
         value={{
             pacientes,
-            guardarPaciente,
-            setPacientes
+            guardarPaciente
         }}
     >
         {children}

@@ -12,13 +12,13 @@ const agregarPaciente = async (req, res) =>{
     const existePaciente = await Paciente.findOne({email})
 
         if (existePaciente) {
-            const error = new Error("Paciente Registered") ;
+            const error = new Error("Paciente exist") ;
             return res.status(400).json({msg: error.message})
         } 
 
-    const paciente = new Paciente(req.body);
-    paciente.veterinario = req.veterinario.id;
-    
+        
+        const paciente = new Paciente(req.body);
+        paciente.veterinario = req.veterinario.id;
     try {
         const pacienteRegistrado = await paciente.save();
         res.json(pacienteRegistrado);
