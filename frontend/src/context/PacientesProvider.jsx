@@ -8,34 +8,34 @@ export const PacientesProvider = ({children}) => {
 
     const [pacientes, setPacientes] =useState([])
 
-    const guardarPaciente = async (paciente) =>{
-        try {
-            const token = localStorage.getItem('token')
-            const config ={
-                headers:{
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            }
-            const {data} = await clienteAxios.post('/pacientes',paciente,config)
-            console.log(data);
-            const {__v ,...pacienteAlmacenado} = data
+    const guardarPaciente = async (paciente) => {
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await clienteAxios.post('/pacientes', paciente, config); // para ver el acceso en nuestra web 
 
-            setPacientes([pacienteAlmacenado,...paciente])
+        const { createdAt, updatedAt, __v, ...pacienteAlmacenado } = data; // le pedimos que nos quite los valores que no necesitamos. 
 
-            
-        } catch (error) {
-            console.log( error);            
-        }
-        console.log(paciente);
-        
-    }
+        setPacientes([pacienteAlmacenado,...pacientes])
 
+
+      } catch (error) {
+        console.log(error.response.data.msg);
+      }
+    };
+
+    
   return (
     <PacientesContext.Provider
         value={{
             pacientes,
-            guardarPaciente
+            guardarPaciente,
+            setPacientes
         }}
     >
         {children}
