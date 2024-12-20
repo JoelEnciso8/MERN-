@@ -1,6 +1,6 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Alerta from "../components/Alerta";
-import  usePacientes from "../hooks/usePaciente";
+import  usePacientes from "../hooks/usePacientes";
 
 const Form = () => {
 
@@ -9,11 +9,25 @@ const Form = () => {
     const [email, setEmail] = useState('')
     const [fecha, setFecha ]= useState('')
     const [sintomas, setSintomas] = useState('')
+    // const [telefono, setTelefono] = useState('')
+    const [id, setId] = useState(null)
 
     const [alerta , setAlerta] = useState({})
 
-    const {guardarPaciente} = usePacientes()
-    
+    const {guardarPaciente, paciente } = usePacientes()
+
+    useEffect(()=>{
+        if (paciente?.nombre) {
+            setNombre(paciente.nombre || "" )
+            setPropietario(paciente.propietario || "")
+            setEmail(paciente.email || "")
+            setFecha(paciente.fecha || "")
+            // setTelefono(paciente.telefono || "")
+            setSintomas(paciente.sintomas || "")
+            setId(paciente._id || null)
+        }
+    },[paciente])
+
 
     const handleSubmit = e  =>{
         e.preventDefault()
@@ -35,7 +49,27 @@ const Form = () => {
 
 
         setAlerta({})
-        guardarPaciente({nombre, propietario,email,fecha,sintomas})
+        // Guarda al paciente 
+        guardarPaciente({nombre, propietario,email,fecha,sintomas,id})
+        
+        setAlerta({
+            msg:'paciente Registrado',
+            error:false
+         });
+
+         
+        // Limpiar el formulario después de enviar
+        setNombre('');
+        setPropietario('');
+        // setTelefono('');
+        setEmail('');
+        setFecha('');
+        setSintomas('');
+
+                // Ocultar la alerta después de 3 segundos
+                setTimeout(() => {
+                    setAlerta({});
+                }, 3000);
 
     }
 
@@ -43,10 +77,13 @@ const Form = () => {
 
   return (
     <>
-        <p className='text.lg text-center mb-10'>
-            Add your <span className='text-green-800 font-bold'>PAWtient</span> y {''}
-            <span className='text-indigo-600 font-bold'>Administralos</span>
-        </p>
+
+            <h2 className=' font-black text-3xl text-center'> Administrador de Pacientes</h2>
+
+            <p className='text-xl mt-5 mb-10 text-center'> 
+                Añade tus pacientes y  {''}
+                <span className='text-indigo-700 font-bold'> Administralos.</span>
+            </p>
 
 
         <form className='bg-white py-10 px-5 mb-10 lg:mb-5 shadow-md rounded-md'
@@ -83,7 +120,7 @@ const Form = () => {
                     />
             </div>
             
-            <div className='mb-5'>
+            {/* <div className='mb-5'>
                 <label
                 className='text-gray-700 uppercase font-bold' 
                 htmlFor='telefono'
@@ -93,8 +130,10 @@ const Form = () => {
                     type="text" 
                     placeholder='Phone Number'
                     className='border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md'
+                    value={telefono}
+                    onChange={e=> setTelefono(e.target.value)}
                     />
-            </div>
+            </div> */}
             
             <div className='mb-5'>
                 <label
@@ -158,7 +197,7 @@ const Form = () => {
             <input 
             className='bg-indigo-600 cursor-pointer w-full p-3 text-white uppercase font-bold hover:bg-indigo-900 transition-colors'
             type="submit" 
-            value={'Agregar Paciente'}
+            value={id ? 'Guardar Cambios' : ' Agregar Pacientes'}
             />
 
 

@@ -36,7 +36,7 @@ const Login =  () => {
 
     // para que el user y al sesion queden iniciadas esta se deben pasar por localStorage, donde el Token se mostrara como unico dando a entender que estamos en la sesion acordada. 
 
-    localStorage.setItem('Token',data.token)
+    localStorage.setItem('token',data.token)
 
     console.log(data);
     setAuth(data)
@@ -44,8 +44,8 @@ const Login =  () => {
     
   } catch (error) {
     setAlerta({
-      // msg: error.response.data.msg,
-      error: true 
+      msg: error.response?.data?.msg || "Error en el servidor. Credenciales incorrectas.",
+       error: true 
     })
     ocultarAlerta()
   }
@@ -61,8 +61,8 @@ const Login =  () => {
   }
   
   const limpiarCampos = () => {
-    setEmail("");
-    setPassword("");
+    setEmail(" ");
+    setPassword(" ");
   };
   
   const {msg} = alerta
